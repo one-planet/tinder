@@ -2,25 +2,25 @@ import React, { useState } from "react";
 import Card from "@mui/material/Card";
 import CardMedia from "@mui/material/CardMedia";
 import Button from "@mui/material/Button";
-import { Stack, Box } from "@mui/material";
+import { Stack, Box, Fade } from "@mui/material";
 
 function App() {
-  // Array of images
-  const images = ["ken.jpeg", "leo.jpeg", "tom.jpeg"];
-
-  // State to keep track of the current image
+  const imagesBoy = ["ken.jpeg", "leo.jpeg", "tom.jpeg"];
+  const imagesGirl = ["marg.jpeg", "brie.jpeg", "taylor.jpeg"];
+  const images = imagesBoy;
   const [currentImage, setCurrentImage] = useState(images[0]);
+  const [fade, setFade] = useState(true);
 
-  // Function to handle 'Like' button click
   const handleLikeClick = () => {
-    setCurrentImage((prev) => {
-      // Find the index of the current image
-      const currentIndex = images.indexOf(prev);
-      // Calculate the index of the next image
-      const nextIndex = (currentIndex + 1) % images.length;
-      // Return the next image
-      return images[nextIndex];
-    });
+    setFade(false); // Start fade out
+    setTimeout(() => {
+      setCurrentImage((prev) => {
+        const currentIndex = images.indexOf(prev);
+        const nextIndex = (currentIndex + 1) % images.length;
+        return images[nextIndex];
+      });
+      setFade(true); // Fade in the new image
+    }, 500); // Adjust timing based on fade duration
   };
 
   return (
@@ -40,12 +40,14 @@ function App() {
           mx: "auto",
         }}
       >
-        <CardMedia
-          component="img"
-          height="300"
-          image={`src/assets/${currentImage}`} // Use state for the image source
-          alt="Profile Image"
-        />
+        <Fade in={fade} timeout={500}>
+          <CardMedia
+            component="img"
+            height="300"
+            image={`src/assets/${currentImage}`}
+            alt="Profile Image"
+          />
+        </Fade>
         <Stack
           direction="row"
           spacing={2}
