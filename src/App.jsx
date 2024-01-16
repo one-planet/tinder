@@ -3,15 +3,24 @@ import Card from "@mui/material/Card";
 import CardMedia from "@mui/material/CardMedia";
 import Button from "@mui/material/Button";
 import { Stack, Box, Fade } from "@mui/material";
+import LandingPage from "./LandingPage"; // Import the LandingPage component
 
 function App() {
   const imagesBoy = ["ken.jpeg", "leo.jpeg", "tom.jpeg"];
   const imagesGirl = ["marg.jpeg", "brie.jpeg", "taylor.jpeg"];
-  const images = imagesBoy;
-  const [currentImage, setCurrentImage] = useState(images[0]);
+  // const images = imagesBoy;
+  const [currentImage, setCurrentImage] = useState(null);
   const [fade, setFade] = useState(true);
+  const [gender, setGender] = useState(null); // State to store user's choice
+
+  const handleSelectGender = (selectedGender) => {
+    setGender(selectedGender);
+    setCurrentImage(selectedGender === "boy" ? imagesBoy[0] : imagesGirl[0]);
+  };
 
   const handleLikeClick = () => {
+    const images = gender === "boy" ? imagesBoy : imagesGirl;
+
     setFade(false); // Start fade out
     setTimeout(() => {
       setCurrentImage((prev) => {
@@ -22,6 +31,10 @@ function App() {
       setFade(true); // Fade in the new image
     }, 500); // Adjust timing based on fade duration
   };
+
+  if (!gender) {
+    return <LandingPage onSelectGender={handleSelectGender} />;
+  }
 
   return (
     <Box
